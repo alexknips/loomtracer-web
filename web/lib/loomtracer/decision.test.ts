@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { createHiveMindClient } from "./client";
+import { createLoomtracerClient } from "./client";
 import { decisionDetail, decisionIdFromSegment, readDecision } from "./decision";
 import type { DecisionBrief, GraphResponse, Timeline } from "./types";
 import graphFixture from "./fixtures/graph.json";
 import detailFixture from "./fixtures/decisions.json";
 
-// Captured from a scratch `hivemind serve`: the whole graph, and for each decision GET /v1/decisions/{id}, its
+// Captured from a scratch `loomtracer serve`: the whole graph, and for each decision GET /v1/decisions/{id}, its
 // timeline and GET /v1/graph?decision={id}, the graph the decision page reads.
 const graph = graphFixture as unknown as GraphResponse;
 const details = detailFixture as unknown as Record<string, { brief: DecisionBrief; timeline: Timeline; graph: GraphResponse }>;
@@ -113,7 +113,7 @@ describe("the decision id in a decision page's path", () => {
 
   it("asks the server for a classifier draft once-escaped, as the link to it was written", async () => {
     const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ data: {} }), { status: 200, headers: { "content-type": "application/json" } }));
-    const client = createHiveMindClient({ HIVEMIND_API_URL: "http://127.0.0.1:18736" }, fetchImpl as unknown as typeof fetch);
+    const client = createLoomtracerClient({ LOOMTRACER_API_URL: "http://127.0.0.1:18736" }, fetchImpl as unknown as typeof fetch);
     await client.decision(decisionIdFromSegment("capture%3A105186%3A3")!);
     await client.timeline(decisionIdFromSegment("capture%3A105186%3A3")!);
     expect(fetchImpl.mock.calls.map(call => String((call as unknown as [URL])[0]))).toEqual([

@@ -1,4 +1,4 @@
-/** The slice of the HiveMind HTTP API this UI reads. Shapes follow docs/GRAPH_CONTRACT.md and the REST handlers. */
+/** The slice of the Loomtracer HTTP API this UI reads. Shapes follow docs/GRAPH_CONTRACT.md and the REST handlers. */
 export type DecisionStatus = "proposed" | "accepted" | "rejected" | "contested" | "superseded";
 export type ActorKind = "human" | "agent" | "unknown";
 

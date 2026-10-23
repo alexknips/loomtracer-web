@@ -33,7 +33,7 @@ describe("a project's graph as a reasoning bundle", () => {
 
   it("owns the bundle by tenant and project", () => {
     const { bundle } = build("pricing");
-    expect(bundle.namespace).toEqual({ datasetId: "hivemind:local:pricing", workspaceId: "local", projectId: "pricing" });
+    expect(bundle.namespace).toEqual({ datasetId: "loomtracer:local:pricing", workspaceId: "local", projectId: "pricing" });
     expect(bundle.title).toBe("Pricing study");
     expect(bundle.contexts.map(context => context.kind)).toEqual(["ledger_record"]);
   });
@@ -79,7 +79,7 @@ describe("a project's graph as a reasoning bundle", () => {
   it("keeps an edge into another project as a pointer, without that project's text", () => {
     const { bundle } = build("pricing-experiments");
     const parent = decision("Test a team plan with included usage");
-    expect(bundle.externalEntryRefs).toEqual([{ id: `external:${parent.id}`, entryId: parent.id, originalId: parent.id, namespace: { datasetId: "hivemind:local:pricing", workspaceId: "local", projectId: "pricing" } }]);
+    expect(bundle.externalEntryRefs).toEqual([{ id: `external:${parent.id}`, entryId: parent.id, originalId: parent.id, namespace: { datasetId: "loomtracer:local:pricing", workspaceId: "local", projectId: "pricing" } }]);
     expect(bundle.entries.some(entry => entry.id === parent.id)).toBe(false);
     expect(JSON.stringify(bundle.sources)).not.toContain(parent.rationale!);
     const link = bundle.connections.find(connection => connection.relation === "legacy:follows_from")!;
@@ -114,7 +114,7 @@ describe("a project's graph as a reasoning bundle", () => {
   it("names each record's source in the ledger", () => {
     const { bundle } = build("pricing");
     const first = bundle.sources[0]!;
-    expect(first.sourceRef).toBe(`hivemind://local/${decision("Price per seat").id}#event-${decision("Price per seat").event_origin}`);
+    expect(first.sourceRef).toBe(`loomtracer://local/${decision("Price per seat").id}#event-${decision("Price per seat").event_origin}`);
     expect(first.role).toBe("record");
     expect(bundle.manifest.segments).toHaveLength(bundle.sources.length);
   });

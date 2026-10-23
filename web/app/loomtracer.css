@@ -1,4 +1,4 @@
-/* Views over the HiveMind ledger: search, a decision, projects, review. Colour and type follow globals.css. */
+/* Views over the Loomtracer ledger: search, a decision, projects, review. Colour and type follow globals.css. */
 .brand-identity { display: grid; gap: 3px; min-width: 0; }
 .workspace-identity { display: block; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 11px; font-weight: 400; letter-spacing: 0; }
 @media (max-width: 700px) { .workspace-identity { max-width: min(210px, 48vw); } }

@@ -1,29 +1,29 @@
 /**
- * Server-side client for the HiveMind HTTP API. The base URL and bearer token come from the
+ * Server-side client for the Loomtracer HTTP API. The base URL and bearer token come from the
  * environment and are read here only: client components never import this module, so the token
- * never reaches a browser (lib/hivemind/boundary.test.ts holds that line).
+ * never reaches a browser (lib/loomtracer/boundary.test.ts holds that line).
  */
 import type { AttentionPage, DecisionBrief, Envelope, GraphResponse, ProjectEntry, ProjectsPage, SearchPage, SupersessionChain, Timeline, WaitingPage, Whoami } from "./types";
 
-export type HiveMindErrorCode = "not_configured" | "unreachable" | "unauthorized" | "not_found" | "rejected" | "bad_response" | "server";
+export type LoomtracerErrorCode = "not_configured" | "unreachable" | "unauthorized" | "not_found" | "rejected" | "bad_response" | "server";
 
-export class HiveMindError extends Error {
-  constructor(message: string, readonly code: HiveMindErrorCode, readonly status: number) {
+export class LoomtracerError extends Error {
+  constructor(message: string, readonly code: LoomtracerErrorCode, readonly status: number) {
     super(message);
-    this.name = "HiveMindError";
+    this.name = "LoomtracerError";
   }
 }
 
-export type HiveMindEnv = Record<string, string | undefined>;
-export type HiveMindConfig = { baseUrl: string; token: string | null; tenant: string | null };
+export type LoomtracerEnv = Record<string, string | undefined>;
+export type LoomtracerConfig = { baseUrl: string; token: string | null; tenant: string | null };
 
-export function hivemindConfig(env: HiveMindEnv = process.env): HiveMindConfig {
-  const raw = env.HIVEMIND_API_URL?.trim();
-  if (!raw) throw new HiveMindError("HIVEMIND_API_URL is not set. Point it at a running `hivemind serve`, for example http://127.0.0.1:8080.", "not_configured", 503);
+export function loomtracerConfig(env: LoomtracerEnv = process.env): LoomtracerConfig {
+  const raw = env.LOOMTRACER_API_URL?.trim();
+  if (!raw) throw new LoomtracerError("LOOMTRACER_API_URL is not set. Point it at a running `loomtracer serve`, for example http://127.0.0.1:8080.", "not_configured", 503);
   let url: URL;
-  try { url = new URL(raw); } catch { throw new HiveMindError("HIVEMIND_API_URL is not a valid URL.", "not_configured", 503); }
-  if (url.protocol !== "http:" && url.protocol !== "https:") throw new HiveMindError("HIVEMIND_API_URL must start with http:// or https://.", "not_configured", 503);
-  return { baseUrl: `${url.origin}${url.pathname.replace(/\/+$/, "")}`, token: env.HIVEMIND_API_KEY?.trim() || null, tenant: env.HIVEMIND_TENANT?.trim() || null };
+  try { url = new URL(raw); } catch { throw new LoomtracerError("LOOMTRACER_API_URL is not a valid URL.", "not_configured", 503); }
+  if (url.protocol !== "http:" && url.protocol !== "https:") throw new LoomtracerError("LOOMTRACER_API_URL must start with http:// or https://.", "not_configured", 503);
+  return { baseUrl: `${url.origin}${url.pathname.replace(/\/+$/, "")}`, token: env.LOOMTRACER_API_KEY?.trim() || null, tenant: env.LOOMTRACER_TENANT?.trim() || null };
 }
 
 type Params = Record<string, string | number | undefined>;
@@ -39,31 +39,31 @@ function errorMessage(body: unknown, fallback: string): string {
   return typeof message === "string" ? message : fallback;
 }
 
-export function createHiveMindClient(env: HiveMindEnv = process.env, fetchImpl: typeof fetch = fetch) {
+export function createLoomtracerClient(env: LoomtracerEnv = process.env, fetchImpl: typeof fetch = fetch) {
   async function get<T>(path: string, params: Params = {}): Promise<T> {
-    const config = hivemindConfig(env);
+    const config = loomtracerConfig(env);
     const url = new URL(`${config.baseUrl}${path}`);
     for (const [key, value] of Object.entries(params)) if (value !== undefined && value !== "") url.searchParams.set(key, String(value));
     const headers: Record<string, string> = { Accept: "application/json" };
     if (config.token) headers.Authorization = `Bearer ${config.token}`;
-    if (config.tenant) headers["X-HiveMind-Tenant"] = config.tenant;
+    if (config.tenant) headers["X-Loomtracer-Tenant"] = config.tenant;
     let response: Response;
     try {
       response = await fetchImpl(url, { headers, cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
     } catch {
-      throw new HiveMindError(`Could not reach the HiveMind server at ${config.baseUrl}. Is \`hivemind serve\` running?`, "unreachable", 502);
+      throw new LoomtracerError(`Could not reach the Loomtracer server at ${config.baseUrl}. Is \`loomtracer serve\` running?`, "unreachable", 502);
     }
     let body: unknown = null;
     try { body = await response.json(); } catch { /* handled below */ }
     if (response.ok) {
-      if (body === null || typeof body !== "object") throw new HiveMindError("The HiveMind server sent a response this UI cannot read.", "bad_response", 502);
+      if (body === null || typeof body !== "object") throw new LoomtracerError("The Loomtracer server sent a response this UI cannot read.", "bad_response", 502);
       return body as T;
     }
-    const message = errorMessage(body, `The HiveMind server answered ${response.status}.`);
-    if (response.status === 401 || response.status === 403) throw new HiveMindError(`${message} Check HIVEMIND_API_KEY.`, "unauthorized", response.status);
-    if (response.status === 404) throw new HiveMindError(message, "not_found", 404);
-    if (response.status >= 400 && response.status < 500) throw new HiveMindError(message, "rejected", response.status);
-    throw new HiveMindError(message, "server", 502);
+    const message = errorMessage(body, `The Loomtracer server answered ${response.status}.`);
+    if (response.status === 401 || response.status === 403) throw new LoomtracerError(`${message} Check LOOMTRACER_API_KEY.`, "unauthorized", response.status);
+    if (response.status === 404) throw new LoomtracerError(message, "not_found", 404);
+    if (response.status >= 400 && response.status < 500) throw new LoomtracerError(message, "rejected", response.status);
+    throw new LoomtracerError(message, "server", 502);
   }
   const data = async <T>(path: string, params?: Params) => (await get<Envelope<T>>(path, params)).data;
   const segment = encodeURIComponent;
@@ -84,7 +84,7 @@ export function createHiveMindClient(env: HiveMindEnv = process.env, fetchImpl: 
         if (!result.next_cursor) return { items, unfiled_decisions: result.unfiled_decisions };
         cursor = result.next_cursor;
       }
-      throw new HiveMindError("The ledger holds more projects than this UI lists.", "bad_response", 502);
+      throw new LoomtracerError("The ledger holds more projects than this UI lists.", "bad_response", 502);
     },
     search: (params: { q?: string; status?: string; topic?: string; project?: string; limit?: number; cursor?: string }) => data<SearchPage>("/v1/decisions/search", params),
     /** The decision itself. (`compact-view` answers for the head of its supersession chain instead.) */
@@ -96,6 +96,6 @@ export function createHiveMindClient(env: HiveMindEnv = process.env, fetchImpl: 
   };
 }
 
-export type HiveMindClient = ReturnType<typeof createHiveMindClient>;
+export type LoomtracerClient = ReturnType<typeof createLoomtracerClient>;
 /** The client every page and route uses: configured from the process environment on each call. */
-export const hivemind = (): HiveMindClient => createHiveMindClient();
+export const loomtracer = (): LoomtracerClient => createLoomtracerClient();

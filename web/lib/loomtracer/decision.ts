@@ -1,4 +1,4 @@
-import type { HiveMindClient } from "./client";
+import type { LoomtracerClient } from "./client";
 import { nodeRawId, stored } from "./projects";
 import type { DecisionBrief, DecisionStatus, GraphResponse, Timeline, TimelineEntry } from "./types";
 
@@ -66,6 +66,6 @@ export function decisionIdFromSegment(segment: string): string | null {
 }
 
 /** What a decision page reads: the decision, its dated story and the graph around it, never the whole tenant graph. */
-export async function readDecision(client: Pick<HiveMindClient, "decision" | "timeline" | "decisionGraph">, id: string): Promise<DecisionDetail> {
+export async function readDecision(client: Pick<LoomtracerClient, "decision" | "timeline" | "decisionGraph">, id: string): Promise<DecisionDetail> {
   return decisionDetail(...await Promise.all([client.decision(id), client.timeline(id), client.decisionGraph(id)]));
 }

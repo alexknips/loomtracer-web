@@ -1,7 +1,7 @@
 import { mkdirSync } from "node:fs";
 import { expect, test as base, type Page } from "@playwright/test";
 
-// Runs against the scratch `hivemind serve` that playwright.config.ts starts: a fictional pricing study
+// Runs against the scratch `loomtracer serve` that playwright.config.ts starts: a fictional pricing study
 // (e2e/support/seed-ledger.mjs). Set LOOMTRACER_SCREENSHOTS=<dir> to also write a screenshot of each page.
 const SEED_TOKEN = "e2e-scratch-token";
 const screenshots = process.env.LOOMTRACER_SCREENSHOTS;
@@ -12,11 +12,11 @@ async function shoot(page: Page, name: string) {
 }
 
 // Every test in this file also checks, as it ends, that the browser talked to the UI only: no request to the
-// HiveMind server, none carrying an Authorization header, and the bearer token in no response.
+// Loomtracer server, none carrying an Authorization header, and the bearer token in no response.
 const test = base.extend<{ leaks: string[] }>({
   leaks: [async ({ page }, use) => {
     const leaks: string[] = [];
-    page.on("request", request => { if (request.url().includes(`:${process.env.HIVEMIND_E2E_PORT ?? 18736}`) || request.headers().authorization) leaks.push(request.url()); });
+    page.on("request", request => { if (request.url().includes(`:${process.env.LOOMTRACER_E2E_PORT ?? 18736}`) || request.headers().authorization) leaks.push(request.url()); });
     page.on("response", async response => { if (response.url().startsWith("http://127.0.0.1:3107") && (await response.text().catch(() => "")).includes(SEED_TOKEN)) leaks.push(`token in ${response.url()}`); });
     await use(leaks);
     expect(leaks).toEqual([]);
@@ -42,19 +42,19 @@ test("the graph shows the ledger's decisions with their statuses, and replays th
   // What was weighed is in the record: the options of a decision are entries of their own.
   await expect(timeline).toContainText("Pure usage");
   await expect(page.getByTestId("ledger-position")).toContainText("Ledger position");
-  await expect(page.getByTestId("read-from")).toContainText("HiveMind ledger, event");
-  await expect(page.getByText("read from the HiveMind ledger", { exact: false }).first()).toBeAttached();
+  await expect(page.getByTestId("read-from")).toContainText("Loomtracer ledger, event");
+  await expect(page.getByText("read from the Loomtracer ledger", { exact: false }).first()).toBeAttached();
   await shoot(page, "graph-timeline");
 
   // Inspecting a record shows who recorded it, and where it sits in the ledger.
   await timeline.getByTestId("timeline-entry").filter({ hasText: "Test a team plan with included usage" }).getByRole("button").first().click();
   const inspector = page.getByTestId("inspector");
   await expect(inspector.getByTestId("reported-provenance")).toContainText("agent:claude:analyst");
-  await expect(inspector.getByTestId("server-capture")).toContainText("HiveMind ledger");
+  await expect(inspector.getByTestId("server-capture")).toContainText("Loomtracer ledger");
   await expect(inspector.getByTestId("source-highlight").first()).toContainText("Test a team plan with included usage");
-  await expect(inspector).toContainText("Read from the HiveMind ledger");
+  await expect(inspector).toContainText("Read from the Loomtracer ledger");
   await expect(inspector).toContainText("Recorded as written");
-  await expect(inspector).toContainText("HiveMind record");
+  await expect(inspector).toContainText("Loomtracer record");
   await expect(inspector).not.toContainText("Legacy");
   await expect(inspector).not.toContainText("Preserved record record");
   // Its connections sit beside it in the timeline, worded as the graph words them.
@@ -143,7 +143,7 @@ test("search can be asked from one project, and says whose decisions it found", 
   await shoot(page, "search-project");
   // A handle nobody registered is not found, so a typo never reads as an empty project.
   await page.goto("/search?project=no-such-project");
-  await expect(page.getByTestId("hivemind-problem")).toContainText("project not registered");
+  await expect(page.getByTestId("loomtracer-problem")).toContainText("project not registered");
 });
 
 test("a classifier draft, whose id has colons in it, opens from a search result", async ({ page }) => {
@@ -233,7 +233,7 @@ test("the API serves the project and its bundle privately, and a missing project
   const bundle = await (await request.get("/api/reasoning?project_ref=pricing")).json();
   expect(Object.keys(bundle).sort()).toEqual(["bundle", "decisions", "head"]);
   expect(bundle.decisions).toEqual({ shown: 3, total: 3, truncated: false });
-  expect(bundle.bundle.namespace).toEqual({ datasetId: "hivemind:local:pricing", workspaceId: "local", projectId: "pricing" });
+  expect(bundle.bundle.namespace).toEqual({ datasetId: "loomtracer:local:pricing", workspaceId: "local", projectId: "pricing" });
   expect(JSON.stringify(bundle)).not.toContain(SEED_TOKEN);
   // A short page says so: how many decisions it draws, of how many the project holds.
   const short = await (await request.get("/api/reasoning?project_ref=pricing&limit=2")).json();

@@ -17,17 +17,17 @@ describe("the bearer token stays on the server", () => {
   it("is never imported by a client component", () => {
     const clients = files.filter(file => /^\s*['"]use client['"]/.test(file.text));
     expect(clients.length).toBeGreaterThan(0);
-    const leaks = clients.filter(file => /hivemind\/(client|bundle)['"]|node:crypto/.test(file.text)).map(file => file.path);
+    const leaks = clients.filter(file => /loomtracer\/(client|bundle)['"]|node:crypto/.test(file.text)).map(file => file.path);
     expect(leaks).toEqual([]);
   });
 
-  it("is read from the environment only in lib/hivemind/client.ts, and never from a NEXT_PUBLIC variable", () => {
-    const reads = files.filter(file => /\benv\.HIVEMIND_API_KEY|env\[["']HIVEMIND_API_KEY/.test(file.text)).map(file => file.path);
-    expect(reads).toEqual(["lib/hivemind/client.ts"]);
-    expect(files.filter(file => /NEXT_PUBLIC_[A-Z_]*(HIVEMIND|TOKEN|KEY)/.test(file.text)).map(file => file.path)).toEqual([]);
+  it("is read from the environment only in lib/loomtracer/client.ts, and never from a NEXT_PUBLIC variable", () => {
+    const reads = files.filter(file => /\benv\.LOOMTRACER_API_KEY|env\[["']LOOMTRACER_API_KEY/.test(file.text)).map(file => file.path);
+    expect(reads).toEqual(["lib/loomtracer/client.ts"]);
+    expect(files.filter(file => /NEXT_PUBLIC_[A-Z_]*(LOOMTRACER|TOKEN|KEY)/.test(file.text)).map(file => file.path)).toEqual([]);
   });
 
   it("is not named in the Next config, which would inline it into the client bundle", () => {
-    expect(readFileSync(join(root, "next.config.ts"), "utf8")).not.toMatch(/HIVEMIND|env:/);
+    expect(readFileSync(join(root, "next.config.ts"), "utf8")).not.toMatch(/LOOMTRACER|env:/);
   });
 });

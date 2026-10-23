@@ -1,12 +1,12 @@
 /**
- * Renders one project of the HiveMind decision graph as a reasoning bundle, the shape the history
+ * Renders one project of the Loomtracer decision graph as a reasoning bundle, the shape the history
  * views (timeline, trace map, sources, inspector) read. A pure function of `GET /v1/graph?project=`
  * (the project's newest decisions and what hangs off them) and that project's entry in the project list:
  *
  * - each Decision, Option, Evidence, Hypothesis and Question node is one record (a source with the
  *   node's words) and one entry whose span covers those words;
  * - each graph edge between two such nodes is one connection, kept in the direction the graph
- *   stores it (`legacy:<relation>`; the UI reads the word from lib/hivemind/relations.ts);
+ *   stores it (`legacy:<relation>`; the UI reads the word from lib/loomtracer/relations.ts);
  * - an edge to a decision filed under another project keeps the edge and points at an external
  *   reference, so the other project's text is not copied here;
  * - sources are ordered by the decision that introduced them, in ledger order, so moving the
@@ -21,7 +21,7 @@ import type { Actor, Connection, Entry, ExternalEntryRef, ReasoningBundle, Sourc
 import { nodeKind, nodeRawId, projectOf, stored } from "./projects";
 import type { GraphDecision, GraphNode, GraphResponse, ProjectSummary } from "./types";
 
-export const LEDGER_ACTOR_ID = "hivemind:ledger";
+export const LEDGER_ACTOR_ID = "loomtracer:ledger";
 export type ProjectBundle = { bundle: ReasoningBundle; head: string };
 
 /** Node kinds that become records. Everything else (actors, projects, requests, blockers...) does not. */
@@ -30,7 +30,7 @@ const LABEL: Record<string, string> = { Decision: "Decision", Option: "Option", 
 const PROPOSER_EDGES = new Set(["PROPOSED_BY"]);
 const sha256 = (text: string) => createHash("sha256").update(text).digest("hex");
 const actorKind = (id: string): Actor["kind"] => id.startsWith("human:") ? "human" : id.startsWith("agent:") ? "agent" : id.startsWith("service:") || id === LEDGER_ACTOR_ID ? "system" : "unknown";
-export const bundleId = (tenant: string, projectRef: string) => `hivemind:${tenant}:${projectRef}`;
+export const bundleId = (tenant: string, projectRef: string) => `loomtracer:${tenant}:${projectRef}`;
 
 type Member = { node: GraphNode; raw: string; introducedBy: GraphDecision; order: number };
 
@@ -72,11 +72,11 @@ export function buildProjectBundle(graph: GraphResponse, project: Pick<ProjectSu
     }
   }
 
-  const contextId = `context:hivemind:${projectRef}`;
+  const contextId = `context:loomtracer:${projectRef}`;
   const id = bundleId(tenant, projectRef);
   const proposers = (decision: GraphDecision) => targets(`Decision:${decision.id}`, ...PROPOSER_EDGES).map(nodeRawId);
   const proposerOf = (decision: GraphDecision) => proposers(decision)[0] ?? decision.deciders[0]?.id ?? LEDGER_ACTOR_ID;
-  const actors = new Map<string, Actor>([[LEDGER_ACTOR_ID, { id: LEDGER_ACTOR_ID, name: "HiveMind ledger", kind: "system" }]]);
+  const actors = new Map<string, Actor>([[LEDGER_ACTOR_ID, { id: LEDGER_ACTOR_ID, name: "Loomtracer ledger", kind: "system" }]]);
   const noteActor = (actorId: string) => { if (!actors.has(actorId)) actors.set(actorId, { id: actorId, name: actorId, kind: actorKind(actorId) }); return actorId; };
 
   const sources: SourceMessage[] = [];
@@ -94,7 +94,7 @@ export function buildProjectBundle(graph: GraphResponse, project: Pick<ProjectSu
     const extra = decision ? [decision.quote && `Said: ${decision.quote.trim()}`, decision.question && `Answering: ${decision.question.trim()}`, decision.binds && `Binds: ${decision.binds.trim()}`, decision.undo_cost && `Undo cost: ${decision.undo_cost.trim()}`].filter((line): line is string => Boolean(line)) : [];
     const content = [stated, ...extra].join("\n\n");
     const sourceId = `source:${raw}`;
-    const sourceRef = `hivemind://${tenant}/${raw}${decision?.event_origin != null ? `#event-${decision.event_origin}` : ""}`;
+    const sourceRef = `loomtracer://${tenant}/${raw}${decision?.event_origin != null ? `#event-${decision.event_origin}` : ""}`;
     sources.push({ id: sourceId, originalId: raw, actorId, role: "record", content, occurredAt: when, loggedAt: when, order, sourceRef, attachmentIds: [], active: true, provenance: { kind: "authored", recordedBy: actorId, recordedAt: when ?? now } });
     const span = { messageId: sourceId, start: 0, end: stated.length };
     spanOf.set(node.id, span);
@@ -143,7 +143,7 @@ export function buildProjectBundle(graph: GraphResponse, project: Pick<ProjectSu
     schemaVersion: "0.3.0", id, title: project.name, namespace: { datasetId: id, workspaceId: tenant, projectId: projectRef },
     actors: [...actors.values()], contexts: [{ id: contextId, title: project.name, kind: "ledger_record" }], sources, attachments: [],
     manifest: {
-      threadId: id, frozenAt: now, cutoffDescription: `HiveMind ledger through event ${head}, read at ${now}.`,
+      threadId: id, frozenAt: now, cutoffDescription: `Loomtracer ledger through event ${head}, read at ${now}.`,
       segments: sources.map(source => ({ ref: source.sourceRef, sha256: sha256(source.content), selectedMessageIds: [source.id] })), exclusions: [],
     },
     entries, connections,
@@ -151,10 +151,10 @@ export function buildProjectBundle(graph: GraphResponse, project: Pick<ProjectSu
       id: runId, parentId: null, createdAt: now, recordedBy: LEDGER_ACTOR_ID, sourceCutoff: sources.length, sourceMessageIds: sources.map(source => source.id),
       addedEntryIds: entries.map(entry => entry.id), addedConnectionIds: connections.map(connection => connection.id), replacements: [],
       uncertainties: [
-        "Drawn from the HiveMind graph: decisions with their options, evidence, assumptions and questions. Requests, blockers, notifications, reaffirmations and project links are not drawn here.",
+        "Drawn from the Loomtracer graph: decisions with their options, evidence, assumptions and questions. Requests, blockers, notifications, reaffirmations and project links are not drawn here.",
         ...(graph.truncated ? [`Only the newest decisions of this project are drawn in full; it holds ${graph.total_matches ?? "more"}. Older ones appear only where a shown decision links to them, and without what they weighed.`] : []),
       ],
-      notes: `Rendered from GET /v1/graph?project=${projectRef} at ledger event ${head}. Each record is one HiveMind node; each connection is one graph edge in its stored direction. Order is the order of the decision that introduced the record. Status and deciders are the graph's derived fields.`,
+      notes: `Rendered from GET /v1/graph?project=${projectRef} at ledger event ${head}. Each record is one Loomtracer node; each connection is one graph edge in its stored direction. Order is the order of the decision that introduced the record. Status and deciders are the graph's derived fields.`,
       reviewResolutions: [],
     }] : [],
     reviewNotes: [], authorityGrants: [], commitmentReceipts: [], externalEntryRefs: [...external.values()],
