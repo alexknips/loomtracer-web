@@ -1,5 +1,11 @@
 # Jeff's UI on the Loomtracer API: what maps and what does not
 
+**This file is the contract between two repositories**: this one (the UI) and
+[`alexknips/loomtracer`](https://github.com/alexknips/loomtracer) (the server). A change to both
+sides is two pull requests. The backend PR lands and is released first; the frontend PR then
+raises the pinned release in `LOOMTRACER_VERSION` at the repository root and updates this file.
+See [`CONTRIBUTING.md`](../CONTRIBUTING.md).
+
 The UI began on Supabase. It now reads a Loomtracer server over its HTTP API, and nothing else.
 This is one row per page and API route of the original app (`TheChairmanMiao/neurofilament`
 at `5c0a0278`), saying what became of it and which Loomtracer endpoint it uses. Where there is

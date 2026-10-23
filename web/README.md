@@ -9,9 +9,15 @@ original UI did (sign-in, teams, tokens, accepting or rejecting a decision). Tho
 left out rather than shown dead. [`LOOMTRACER_API_MAP.md`](LOOMTRACER_API_MAP.md) lists each one and
 what the server would need.
 
+This repository is the UI only. The server is [`alexknips/loomtracer`](https://github.com/alexknips/loomtracer),
+and `LOOMTRACER_API_MAP.md` is the contract between the two: a change to both sides is two pull
+requests, the backend PR landing and being released first, then the frontend PR raising the
+pinned release in `LOOMTRACER_VERSION` ([`CONTRIBUTING.md`](../CONTRIBUTING.md)).
+
 ## Run it
 
-You need Node 20.9 or later and a running Loomtracer server.
+You need Node 20.9 or later and a running Loomtracer server (`loomtracer serve`, from a
+[release](https://github.com/alexknips/loomtracer/releases)).
 
 ```bash
 # 1. A Loomtracer server. A scratch one is enough to look around:
@@ -59,7 +65,7 @@ off them; the server returns each edge once and bounds the page with `limit` and
 - each Decision, Option, Evidence, Hypothesis and Question node is one record, whose source is
   the node's own words (a decision's title and rationale, plus its quote, binds and undo cost);
 - each graph edge between two such records is one connection, in the direction the graph stores
-  it, worded with the graph contract's labels (`docs/GRAPH_CONTRACT.md` in the repository root);
+  it, worded with the graph contract's labels ([`docs/GRAPH_CONTRACT.md`](https://github.com/alexknips/loomtracer/blob/master/docs/GRAPH_CONTRACT.md) in the backend repository);
 - an edge to a decision of another project stays a pointer to it, not a copy of its text;
 - records are ordered by the decision that introduced them, in ledger order.
 
@@ -80,7 +86,9 @@ The end-to-end tests start their own scratch `loomtracer serve` on port 18736 (o
 `LOOMTRACER_E2E_PORT`, which must be 18736 or higher), in a temporary directory, seeded with a
 fictional pricing study, and stop it by pidfile. They never touch another ledger, and they refuse
 `:8080` and `:18732`. They need `loomtracer` on `PATH` (or `LOOMTRACER_BIN`) and a Playwright
-Chromium (`npx playwright install chromium`). Set `LOOMTRACER_SCREENSHOTS=<dir>` to also write a
+Chromium (`npx playwright install chromium`). `scripts/e2e-pinned.sh` at the repository root does
+both: it downloads the release named in `LOOMTRACER_VERSION`, checks its checksum, and runs the
+tests with `LOOMTRACER_BIN` set to it. Set `LOOMTRACER_SCREENSHOTS=<dir>` to also write a
 screenshot of each page, and `LOOMTRACER_E2E_BUILT=1` to test the production build instead of
 `next dev`.
 
