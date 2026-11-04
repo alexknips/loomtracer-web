@@ -41,3 +41,12 @@ jobs:
 
       - name: Unit tests
         run: npm test
+
+      - name: Reasoning package type check
+        run: npm run typecheck:reasoning
+
+      - name: Synthetic migration preview
+        run: npm run --silent preview:migration > "$RUNNER_TEMP/migration-preview.json"
+
+      - name: Shared workspace against the pinned backend
+        run: npm run test:shared-workspace

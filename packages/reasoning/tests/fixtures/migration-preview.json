@@ -1,0 +1,294 @@
+{
+  "format": "loomtracer-migration-preview",
+  "version": 1,
+  "synthetic": true,
+  "source": {
+    "system": "hosted-reasoning",
+    "instanceId": "synthetic-source",
+    "schemaVersion": "0.3.0"
+  },
+  "scope": {
+    "workspaceId": "synthetic-workspace",
+    "projectId": "synthetic-project",
+    "datasetIds": [
+      "synthetic-dataset"
+    ]
+  },
+  "coverage": {
+    "reasoningHistory": "synthetic-fixture",
+    "storageAudit": "not-modeled-synthetic",
+    "consistency": "static-fixture"
+  },
+  "datasets": [
+    {
+      "bundle": {
+        "schemaVersion": "0.3.0",
+        "id": "synthetic-dataset",
+        "title": "Synthetic migration contract",
+        "namespace": {
+          "datasetId": "synthetic-dataset",
+          "workspaceId": "synthetic-workspace",
+          "projectId": "synthetic-project"
+        },
+        "actors": [
+          {
+            "id": "person-one",
+            "name": "Synthetic Person One",
+            "kind": "human"
+          },
+          {
+            "id": "person-two",
+            "name": "Synthetic Person Two",
+            "kind": "human"
+          },
+          {
+            "id": "recorder",
+            "name": "Synthetic Recorder",
+            "kind": "agent"
+          },
+          {
+            "id": "unused-person",
+            "name": "Unused synthetic identity",
+            "kind": "human"
+          }
+        ],
+        "contexts": [
+          {
+            "id": "discussion",
+            "title": "Synthetic discussion",
+            "kind": "discussion"
+          }
+        ],
+        "sources": [
+          {
+            "id": "source-one",
+            "originalId": "synthetic-message-one",
+            "actorId": "person-one",
+            "role": "user",
+            "content": "Option A costs less. Option B meets the goal. Compare both 🚀.",
+            "occurredAt": "2026-01-01T00:00:00Z",
+            "loggedAt": "2026-01-01T00:00:00Z",
+            "order": 1,
+            "sourceRef": "synthetic://segment-one",
+            "attachmentIds": [],
+            "active": true
+          }
+        ],
+        "attachments": [],
+        "manifest": {
+          "threadId": "synthetic-thread",
+          "frozenAt": "2026-01-01T00:00:00Z",
+          "cutoffDescription": "Invented fixture only",
+          "segments": [
+            {
+              "ref": "synthetic://segment-one",
+              "sha256": "b43aeee744dc03808c90743cef923833a4f3331323dddd3aab92e054a330c346",
+              "selectedMessageIds": [
+                "source-one"
+              ]
+            }
+          ],
+          "exclusions": []
+        },
+        "entries": [
+          {
+            "id": "option-a-v1",
+            "logicalId": "option-a",
+            "version": 1,
+            "contextId": "discussion",
+            "labels": [
+              "option"
+            ],
+            "provenance": {
+              "expressedBy": "person-one",
+              "recordedBy": "recorder",
+              "occurredAt": "2026-01-01T00:00:00Z",
+              "recordedAt": "2026-01-01T00:00:00Z",
+              "basis": "direct",
+              "sourceSpans": [
+                {
+                  "messageId": "source-one",
+                  "start": 0,
+                  "end": 20
+                }
+              ]
+            }
+          },
+          {
+            "id": "option-b-v1",
+            "logicalId": "option-b",
+            "version": 1,
+            "contextId": "discussion",
+            "labels": [
+              "option"
+            ],
+            "provenance": {
+              "expressedBy": "person-one",
+              "recordedBy": "recorder",
+              "occurredAt": "2026-01-01T00:00:00Z",
+              "recordedAt": "2026-01-01T00:00:00Z",
+              "basis": "direct",
+              "sourceSpans": [
+                {
+                  "messageId": "source-one",
+                  "start": 21,
+                  "end": 45
+                }
+              ]
+            }
+          },
+          {
+            "id": "assessment-v1",
+            "logicalId": "assessment",
+            "version": 1,
+            "contextId": "discussion",
+            "labels": [
+              "assessment"
+            ],
+            "provenance": {
+              "expressedBy": "person-one",
+              "recordedBy": "recorder",
+              "occurredAt": "2026-01-01T00:00:00Z",
+              "recordedAt": "2026-01-01T00:00:00Z",
+              "basis": "direct",
+              "sourceSpans": [
+                {
+                  "messageId": "source-one",
+                  "start": 46,
+                  "end": 62
+                }
+              ]
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "comparison-v1",
+            "logicalId": "comparison",
+            "version": 1,
+            "contextId": "discussion",
+            "relation": "compares",
+            "participants": [
+              {
+                "entryId": "assessment-v1",
+                "role": "assessment"
+              },
+              {
+                "entryId": "option-a-v1",
+                "role": "alternative"
+              },
+              {
+                "entryId": "option-b-v1",
+                "role": "alternative"
+              }
+            ],
+            "provenance": {
+              "expressedBy": "person-one",
+              "recordedBy": "recorder",
+              "occurredAt": "2026-01-01T00:00:00Z",
+              "recordedAt": "2026-01-01T00:00:00Z",
+              "basis": "direct",
+              "sourceSpans": [
+                {
+                  "messageId": "source-one",
+                  "start": 0,
+                  "end": 62
+                }
+              ]
+            }
+          }
+        ],
+        "runs": [
+          {
+            "id": "run-one",
+            "parentId": null,
+            "createdAt": "2026-01-01T00:00:00Z",
+            "recordedBy": "recorder",
+            "sourceCutoff": 1,
+            "sourceMessageIds": [
+              "source-one"
+            ],
+            "addedEntryIds": [
+              "option-a-v1",
+              "option-b-v1",
+              "assessment-v1"
+            ],
+            "addedConnectionIds": [
+              "comparison-v1"
+            ],
+            "replacements": [],
+            "uncertainties": [],
+            "notes": "Invented fixture",
+            "reviewResolutions": []
+          }
+        ],
+        "reviewNotes": [],
+        "authorityGrants": [],
+        "commitmentReceipts": [],
+        "externalEntryRefs": []
+      },
+      "head": "synthetic-head-one",
+      "recording": {
+        "actorId": "recorder",
+        "recordedAt": "2026-01-01T00:00:00Z"
+      },
+      "captureMetadata": {
+        "person-one": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "person-two": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "recorder": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "unused-person": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "discussion": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "source-one": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "option-a-v1": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "option-b-v1": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "assessment-v1": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "comparison-v1": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        },
+        "run-one": {
+          "actorId": "recorder",
+          "recordedAt": "2026-01-01T00:00:00Z"
+        }
+      },
+      "commitments": [],
+      "authorityGrants": [],
+      "sha256": "80a22bafd1e9c87008574a8215340ba3a493258857994f5b3d88e97dc93842e6"
+    }
+  ],
+  "artifacts": [
+    {
+      "ref": "synthetic://segment-one",
+      "encoding": "utf8",
+      "content": "Option A costs less. Option B meets the goal. Compare both 🚀.",
+      "sha256": "b43aeee744dc03808c90743cef923833a4f3331323dddd3aab92e054a330c346"
+    }
+  ]
+}

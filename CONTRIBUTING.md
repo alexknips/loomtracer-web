@@ -1,5 +1,8 @@
 # Contributing
 
+Use Node 22.18 or later for repository checks, including the synthetic migration-preview CLI.
+CI uses Node 22. The web application's runtime minimum is documented separately in the README.
+
 Before you open a pull request, run what CI runs (`.github/workflows/ci.yml`):
 
 ```bash
