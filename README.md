@@ -29,6 +29,19 @@ A change that touches both sides is two pull requests, in this order:
 
 Run the browser tests against the pinned release with `scripts/e2e-pinned.sh`.
 
+## Shared workspace and onboarding
+
+The repository split does not merge separate users' histories.
+[Shared workspace consolidation](docs/shared-workspace/README.md) describes the current boundaries,
+the migration procedure, and the information needed to establish one shared workspace.
+[New user onboarding](docs/shared-workspace/onboarding.md) defines how another person joins that
+workspace once it is ready.
+[Contributing migration support](docs/shared-workspace/contributing.md) explains what can be
+built independently and the evidence needed for a cross-repository handoff.
+[Synthetic rehearsal](docs/shared-workspace/synthetic-rehearsal.md) runs the shared-workspace
+test and migration preview without connecting to a live workspace. These development commands
+require Node 22.18 or later (the web app's minimum version above is unchanged).
+
 ## Deploying
 
 Vercel builds the app from the project root `web/`.

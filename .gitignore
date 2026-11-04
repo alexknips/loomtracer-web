@@ -12,3 +12,6 @@
 
 # The Loomtracer release binary that scripts/e2e-pinned.sh downloads
 /.loomtracer-bin/
+
+# Local migration evidence and owner handoffs; never part of a public PR.
+/docs/shared-workspace/private/

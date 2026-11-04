@@ -5,6 +5,9 @@
   "workspaces": ["web", "packages/reasoning"],
   "scripts": {
     "build": "npm run build --workspace=web",
-    "test": "npm test --workspaces --if-present"
+    "typecheck:reasoning": "tsc --noEmit -p packages/reasoning/tsconfig.json",
+    "test": "npm test --workspaces --if-present && node --test scripts/shared-workspace/*.test.mjs",
+    "test:shared-workspace": "bash scripts/shared-workspace-pinned.sh",
+    "preview:migration": "node --experimental-strip-types scripts/migration-preview.mts --synthetic"
   }
 }
