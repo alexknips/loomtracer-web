@@ -16,6 +16,14 @@ You need Node 20.9 or later and a running Loomtracer server (`loomtracer serve`,
 [latest release](https://github.com/alexknips/loomtracer/releases)). Then `npm ci`, and follow
 [`web/README.md`](web/README.md).
 
+## Review the 3D viewer prototype
+
+Try the [hosted Atlas example](https://loomtracer.vercel.app/graph/prototype), or run `npm ci` and `npm run dev --workspace=web` from the repository root and open [the local prototype](http://127.0.0.1:3000/graph/prototype). The fictional records are bundled, so you can review the layout and example charts before connecting a ledger.
+
+Search for a decision and select its headline to read its sources. Switch between the 3D graph and the tree, scrub the timeline beneath them, then save a named view. Its tab restores the graph position, selected record and point in history after a refresh. Project navigation is in the header. These controls share the same workspace on desktop and phone widths.
+
+To try ledger data, open a project in `/graph` and choose **Open in 3D viewer**. Its relationship charts and saved views use that project’s records. On loopback, the fictional Atlas project also supports questions through a signed-in local Codex app server. See [web setup](web/README.md) for the connection details.
+
 ## Two repositories, one contract
 
 [`web/LOOMTRACER_API_MAP.md`](web/LOOMTRACER_API_MAP.md) is the contract between this repo and

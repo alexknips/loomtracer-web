@@ -10,12 +10,12 @@ describe("route boundary", () => {
     expect(proxy(request(path)).status).toBe(200);
   });
 
-  it.each(["/", "/demo", "/og.png", "/favicon.ico", "/reasoning/brand/logo.svg", "/_next/static/chunks/app.js"])("lets a public-only deployment serve %s", path => {
+  it.each(["/", "/demo", "/graph/prototype", "/graph/prototype?project=one", "/og.png", "/favicon.ico", "/reasoning/brand/logo.svg", "/_next/static/chunks/app.js"])("lets a public-only deployment serve %s", path => {
     vi.stubEnv("NEUROFILAMENT_PUBLIC_ONLY", "true");
     expect(proxy(request(path)).status).toBe(200);
   });
 
-  it.each(["/graph", "/search", "/review", "/projects", "/inspect", "/decisions/decision-1", "/api/reasoning", "/api/health"])("hides %s on a public-only deployment", path => {
+  it.each(["/graph", "/search", "/review", "/projects", "/inspect", "/decisions/decision-1", "/api/reasoning", "/api/health", "/api/prototype/chat", "/account/settings", "/graph/prototype/private"])("hides %s on a public-only deployment", path => {
     vi.stubEnv("NEUROFILAMENT_PUBLIC_ONLY", "true");
     const response = proxy(request(path));
     expect(response.status).toBe(404);
@@ -25,5 +25,6 @@ describe("route boundary", () => {
   it("serves a public-only deployment's pages to reads only", () => {
     vi.stubEnv("NEUROFILAMENT_PUBLIC_ONLY", "true");
     expect(proxy(request("/", "POST")).status).toBe(404);
+    expect(proxy(request("/graph/prototype", "POST")).status).toBe(404);
   });
 });

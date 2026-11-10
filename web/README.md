@@ -52,8 +52,13 @@ the open internet with a token for a ledger you would not publish.
 | `/decisions/<id>` | `GET /v1/decisions/{id}`, `.../timeline`, `GET /v1/graph?decision=` | One decision: why, what it weighed, what it rests on, who accepted or rejected it, what replaced it. |
 | `/review` | `GET /v1/decisions/search?status=proposed`, `GET /v1/attention/*` | What needs a person: proposed, contested, unanswered questions, decisions with no stated ground. |
 | `/projects` | `GET /v1/projects` | Projects, their hierarchy and their decisions by status. |
+| `/graph/prototype` | Fictional Atlas records, or the existing project bundle with `?project=<ref>` | A 3D viewer, tree with minimap, timeline, charts and browser-local saved views. |
 | `/inspect` | none | Opens an exported reasoning bundle in the browser. Nothing is uploaded. |
 | `/`, `/demo` | none | Jeff's landing page and fictional demo. |
+
+## Prototype chat
+
+The example charts, search, saved tabs and scrubbable timeline run without a model. For freeform questions on the fictional Atlas timeline, run the app on loopback with a signed-in Codex executable that supports `app-server`. The server checks for Codex in the macOS app or on `PATH`. Set `LOOMTRACER_CODEX_BIN` to an executable path to use another installation. The chat request carries only the fictional records at the playhead. Connected ledger projects use relationship charts calculated locally.
 
 ## How `/graph` reads Loomtracer
 

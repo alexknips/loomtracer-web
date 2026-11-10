@@ -1,0 +1,19 @@
+.projectSelect { max-width:min(46vw,26rem); border:0; border-radius:3px; font:inherit; color:inherit; background:var(--paper); cursor:pointer; }
+.actions { flex:none; display:flex; align-items:center; gap:12px; margin-left:auto; }
+.history { position:relative; z-index:12; font-size:14px; }
+.history summary { white-space:nowrap; color:var(--ink); cursor:pointer; padding:6px 3px; }
+.popover { position:absolute; right:0; top:100%; width:min(270px,76vw); display:grid; gap:12px; padding:15px; border:1px solid var(--line); border-radius:6px; background:var(--paper); }
+.popover label { display:grid; gap:5px; color:var(--quiet); }
+.popover select { min-width:0; width:100%; padding:5px; font:inherit; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:4px; }
+.popover a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+.popover span { font-size:13px; color:var(--quiet); }
+.status { padding:20px clamp(18px,3.6vw,64px); }
+@media(max-width: 600px) {
+  .actions { gap:6px; grid-row:1; grid-column:3; }
+  .projectSelect { max-width:30vw; }
+}
+
+.accessMode { padding-left:8px; border-left:1px solid var(--line); white-space:nowrap; }
+@media(max-width:650px) { .accessMode { display:none; } }
+
+@media(max-width:760px) { .actions a[aria-label="Account settings"] span { display:none; } }

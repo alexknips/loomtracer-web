@@ -1,0 +1,48 @@
+.page {
+  width: min(100%, 760px);
+  margin-inline: auto;
+  padding: clamp(32px, 5vw, 64px) clamp(18px, 3.6vw, 48px);
+  color: var(--ink);
+  font: 400 16px/1.5 var(--font-body), sans-serif;
+}
+.page h1 {
+  margin: 0;
+  font: 600 32px/1.2 var(--font-headline), serif;
+}
+.page > p {
+  margin: 8px 0 28px;
+  color: var(--muted);
+}
+.links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.links li {
+  border-bottom: 1px solid var(--line);
+}
+.links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-block: 18px;
+}
+.links a > span:first-child {
+  display: grid;
+  gap: 4px;
+}
+.links strong {
+  font: 600 calc(64px / 3)/1.35 var(--font-body), sans-serif;
+}
+.links a > span:first-child > span {
+  color: var(--muted);
+}
+.links a:hover strong {
+  text-decoration: underline;
+}
+.links a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}

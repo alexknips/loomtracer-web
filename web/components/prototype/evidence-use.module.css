@@ -1,0 +1,243 @@
+.chart {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  container-type: inline-size;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #fdf8f4;
+  color: #332b32;
+  padding: clamp(14px, 2.6vw, 32px);
+  font-family: var(--font-body), sans-serif;
+}
+.heading h2 {
+  font:
+    600 clamp(21px, 2.2vw, 32px)/1.15 var(--font-headline),
+    serif;
+  margin: 0;
+}
+.heading p,
+.drill header p {
+  color: #332b32bd;
+  font-size: 14px;
+  margin: 6px 0 0;
+}
+.rows {
+  margin-top: 20px;
+}
+.row {
+  border-top: 1px solid #332b3230;
+  padding: 13px 0;
+}
+.rowHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.rowHeading button,
+.memberTitle,
+.sources button {
+  font-family: inherit;
+  color: #332b32;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.rowHeading button,
+.memberTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 1px 0;
+}
+.rowHeading button svg,
+.memberTitle svg {
+  flex-shrink: 0;
+}
+.rowHeading button:hover,
+.memberTitle:hover,
+.sources button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rowHeading button[aria-pressed="true"],
+.memberTitle[aria-pressed="true"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rowHeading .total {
+  flex-shrink: 0;
+  padding: 3px 6px;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 3px;
+  color: #332b32;
+  border: 1px solid #332b323c;
+}
+.total[aria-expanded="true"] {
+  box-shadow: inset 0 0 0 1px #332b32;
+}
+.chart button:focus-visible {
+  outline: 2px solid #332b32;
+  outline-offset: 2px;
+}
+.group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px 22px;
+  margin-top: 6px;
+}
+.bar {
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 95px minmax(28px, 1fr) 22px;
+  column-gap: 6px;
+  min-height: 30px;
+  padding: 3px 6px;
+  color: #332b32;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font:
+    400 13px/1.16 var(--font-body),
+    sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+.bar:hover {
+  background: #332b3208;
+}
+.bar[aria-expanded="true"] {
+  border-color: #332b3270;
+  background: #332b3207;
+}
+.track {
+  display: block;
+  height: 8px;
+  background: #332b3210;
+  border-left: 1px solid #332b323d;
+}
+.track > span {
+  display: block;
+  height: 100%;
+  background-color: var(--role-color);
+}
+.number {
+  text-align: right;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.drill {
+  margin-top: 9px;
+  border: 1px solid #332b3245;
+  border-radius: 5px;
+  background: #fdf8f4;
+  padding: 12px 14px;
+}
+.drill header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.drill h3 {
+  margin: 0;
+  font:
+    600 17px/1.25 var(--font-body),
+    sans-serif;
+}
+.drill header p {
+  font-variant-numeric: tabular-nums;
+}
+.close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #332b323a;
+  border-radius: 4px;
+  background: transparent;
+  color: #332b32;
+  cursor: pointer;
+  flex: none;
+}
+.members {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.members > li {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid #332b3228;
+}
+.memberTitle {
+  font-size: 15px;
+}
+.relationship p {
+  margin: 5px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.relationship + .relationship {
+  margin-top: 10px;
+}
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px 0 0;
+  gap: 4px 12px;
+}
+.sources button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #332b32db;
+  line-height: 1.3;
+  padding: 2px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sources svg {
+  flex-shrink: 0;
+}
+.empty,
+.emptyGroup {
+  margin: 14px 0 2px;
+  color: #332b32c9;
+  font-size: 15px;
+}
+.empty {
+  border-top: 1px solid #332b3230;
+  padding-top: 16px;
+}
+@container (max-width: 550px) {
+  .group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .rowHeading {
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+  .rowHeading .total {
+    font-size: 12px;
+  }
+  .bar {
+    grid-template-columns: 95px minmax(30px, 1fr) 22px;
+    min-height: 30px;
+  }
+  .rows {
+    margin-top: 12px;
+  }
+  .drill {
+    padding: 10px 11px;
+  }
+}

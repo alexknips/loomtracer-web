@@ -1,0 +1,284 @@
+.space,
+.tree {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  color: #332b32;
+  background-color: #fdf8f4;
+  font-family: var(--font-body), "Source Sans 3", sans-serif;
+}
+
+.space {
+  container-type: inline-size;
+  background-image: radial-gradient(circle, #332b3218 0.75px, transparent 0.9px);
+  background-size: 22px 22px;
+  background-position: center;
+}
+.threeCanvas,
+.labelLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.threeCanvas {
+  display: block;
+  outline-offset: -4px;
+  cursor: grab;
+  touch-action: none;
+}
+.threeCanvas:active {
+  cursor: grabbing;
+}
+.threeCanvas:focus-visible {
+  outline: 2px solid #1d90cd;
+}
+.labelLayer {
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hit {
+  position: absolute;
+  display: block;
+  width: 26px;
+  height: 26px;
+  top: 0;
+  left: 0;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  font: inherit;
+  color: #332b32;
+}
+.hit[hidden] {
+  display: none;
+}
+.hit:focus-visible {
+  outline: 2px dashed #332b32;
+  outline-offset: 1px;
+}
+.spatialLabel {
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: max-content;
+  max-width: 155px;
+  padding: 2px 4px;
+  visibility: hidden;
+  font-size: 13px;
+  line-height: 1.14;
+  font-weight: 400;
+  text-align: left;
+  background-color: #fdf8f4d6;
+  border-radius: 2px;
+  color: #332b32;
+  pointer-events: none;
+}
+.hit[data-labeled="true"] .spatialLabel {
+  visibility: visible;
+  pointer-events: auto;
+}
+.hit[data-kind="decision"] .spatialLabel {
+  font-weight: 600;
+  font-size: 15px;
+}
+.hit[data-active="true"] .spatialLabel,
+.hit:hover .spatialLabel,
+.hit:focus-visible .spatialLabel {
+  color: #332b32;
+  background-color: #fdf8f4;
+  box-shadow: 0 0 0 1px #332b3260;
+}
+.spatialControls {
+  display: flex;
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 12;
+  border: 1px solid #332b324a;
+  background: #fdf8f4;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.spatialControls button {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 30px;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 600;
+  background: #fdf8f4;
+  color: #332b32;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+.spatialControls button + button {
+  border-left: 1px solid #332b3230;
+}
+.spatialControls button:hover {
+  background: #332b320a;
+}
+.spatialControls button:focus-visible {
+  outline: 2px solid #1d90cd;
+  outline-offset: -3px;
+}
+.orbitHint {
+  position: absolute;
+  right: 14px;
+  bottom: 18px;
+  color: #332b32ab;
+  font-size: 12px;
+  pointer-events: none;
+  background: #fdf8f4de;
+}
+.orbitHint span {
+  padding: 0 3px;
+}
+.empty {
+  position: absolute;
+  inset: 40% 0 auto;
+  text-align: center;
+}
+
+.tree :global(.react-flow) {
+  --xy-background-color: #fdf8f4;
+  --xy-controls-button-background-color-default: #fdf8f4;
+  --xy-controls-button-background-color-hover-default: #332b320c;
+  --xy-controls-button-border-color-default: #332b3230;
+  --xy-controls-button-color-default: #332b32;
+  --xy-minimap-background-color-default: #fdf8f4;
+  --xy-attribution-background-color-default: #fdf8f4;
+}
+.tree :global(.react-flow__controls) {
+  flex-direction: row;
+  box-shadow: none;
+  border: 1px solid #332b324a;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.tree :global(.react-flow__controls-button) {
+  width: 30px;
+  height: 29px;
+  border: 0;
+  border-right: 1px solid #332b3230;
+}
+.tree :global(.react-flow__controls-button:last-child) {
+  border: 0;
+}
+.tree :global(.react-flow__controls-button svg) {
+  max-width: 13px;
+  max-height: 13px;
+}
+.tree :global(.react-flow__minimap) {
+  border: 1px solid #332b3250;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.tree :global(.react-flow__minimap-svg) {
+  width: clamp(88px, 12vw, 144px);
+  height: auto;
+  display: block;
+}
+.tree :global(.react-flow__node-decisionRecord) {
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+}
+.tree :global(.react-flow__node-decisionRecord:focus-visible) {
+  outline: 2px dashed #332b32;
+  outline-offset: 3px;
+}
+.recordCard {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px 18px 8px 12px;
+  border: 1px solid #332b3255;
+  border-radius: 5px;
+  background: #fdf8f4;
+  color: #332b32;
+}
+.recordCard[data-selected="true"] {
+  box-shadow: 0 0 0 1.5px #332b32;
+  border-color: #332b32;
+}
+.recordCard :global(.react-flow__handle) {
+  width: 4px;
+  min-width: 4px;
+  height: 4px;
+  min-height: 4px;
+  border: 0;
+  background: #332b32;
+}
+.recordKind {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+.recordKind i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--kind-color);
+  border: 1px solid #332b3240;
+}
+.recordTitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 600;
+}
+.branchToggle {
+  position: absolute;
+  right: -10px;
+  top: -9px;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  border: 1px solid #332b3270;
+  border-radius: 50%;
+  font: inherit;
+  font-weight: 600;
+  color: #332b32;
+  background: #fdf8f4;
+  cursor: pointer;
+}
+.branchToggle:focus-visible {
+  outline: 2px solid #1d90cd;
+}
+
+@container (max-width: 520px) {
+  .spatialLabel {
+    font-size: 12px;
+    max-width: 92px;
+    line-height: 1.1;
+  }
+  .hit[data-kind="decision"] .spatialLabel {
+    font-size: 13px;
+  }
+}
